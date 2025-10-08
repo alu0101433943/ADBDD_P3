@@ -4,104 +4,99 @@
 
 ## Entidades
 
-### VIVERO  
+### Vivero  
 **Descripción:** punto de venta/almacén físico.  
-**PK:** `id_vivero`  
 **Atributos:**  
-- `id_vivero` — ENTERO — Ej.: `1`.  
-- `nombre` — CADENA — Ej.: `"Vivero Norte"`.  
-- `direccion` — CADENA — Ej.: `"C/ Flores 10, Santa Cruz"`.  
-- `latitud` — DECIMAL ([-90,90]) — Ej.: `28.4636`.  
-- `longitud` — DECIMAL ([-180,180]) — Ej.: `-16.2518`.
+- `id_vivero`: entero, atributo identificador. Ejemplo: `1`.  
+- `nombre`: cadena. Ejemplo.: `"Vivero Norte"`.  
+- `direccion`: cadena. Ejemplo: `"C/ Flores 10, Santa Cruz"`.  
+- `latitud`: decimal. Ejemplo: `28.4636`.  
+- `longitud`: decimal. Ejemplo: `-16.2518`.
 
 ---
 
-### ZONA (entidad débil de VIVERO)  
-**Descripción:** área dentro del vivero (p. ej. zona exterior, almacén). Depende de VIVERO.  
-**Clave parcial / PK completa:** `codigo_zona` ; PK completa = (`id_vivero`, `codigo_zona`).  
+### Zona (entidad débil de Vivero)  
+**Descripción:** área dentro del vivero (p. ej. zona exterior, almacén). Depende de Vivero.  
 **Atributos:**  
-- `id_vivero` — ENTERO (FK→VIVERO) — Ej.: `1`.  
-- `codigo_zona` — CADENA corta — Ej.: `"ZEX"`.  
-- `nombre_zona` — CADENA — Ej.: `"Zona Exterior"`.  
-- `descripcion` — CADENA — Ej.: `"Exposición de arbustos"`.  
-- `latitud` — DECIMA — Ej.: `28.4637`.  
-- `longitud` — DECIMAL — Ej.: `-16.2519`.
+- `id_zona`: entero. Formado a partir del id_vivero (clave foránea) y codigo_zona.
+- `id_vivero`: entero. Ejemplo: `1`.  
+- `codigo_zona`: cadena. Ejemplo: `"ZEX"`.  
+- `nombre_zona`: cadena. Ejemplo: `"Zona Exterior"`.  
+- `descripcion`: cadena. Ejemplo: `"Exposición de arbustos"`.  
+- `latitud`: decimal. Ejemplo: `28.4637`.  
+- `longitud`: decimal. Ejemplo: `-16.2519`.
 
 ---
 
-### PRODUCTO  
-**Descripción:** artículo vendible.  
-**PK:** `id_producto`  
+### Producto  
+**Descripción:** artículo vendible.    
 **Atributos:**  
-- `id_producto` — ENTERO — Ej.: `1001`.  
-- `nombre` — CADENA — Ej.: `"Rosal 'Red Eden'"`.  
-- `descripcion` — CADENA — Ej.: `"Rosal trepador, 40cm"`.  
-- `tipo` — CADENA — Ej.: `"Planta"`.  
-- `precio_unitario` — DECIMAL ≥ 0 — Ej.: `12.50`.
+- `id_producto`: entero, atributo identificador. Ej.: `1001`.  
+- `nombre`: cadena. Ejemplo: `"Rosal 'Red Eden'"`.  
+- `descripcion`: cadena. Ejemplo: `"Rosal trepador, 40cm"`.  
+- `tipo`: cadena. Ejemplo: `"Planta"`.  
+- `precio_unitario`: decimal. Ej.: `12.50`.
 
 ---
 
-### EMPLEADO  
-**Descripción:** trabajador que puede ser destinado a zonas y gestionar pedidos.  
-**PK:** `id_empleado`  
+### Empleado  
+**Descripción:** trabajador que puede ser destinado a zonas y gestionar pedidos.
 **Atributos:**  
-- `id_empleado` — ENTERO — Ej.: `501`.  
-- `nombre` — CADENA — Ej.: `"María"`.  
-- `apellidos` — CADENA — Ej.: `"González Pérez"`.  
-- `dni` — CADENA — Ej.: `"12345678A"`.  
-- `fecha_contratacion` — FECHA `YYYY-MM-DD` — Ej.: `2020-06-01`.
+- `id_empleado`: entero, atributo identificador. Ejemplo: `501`.  
+- `nombre`: cadena. Ejemplo: `"María"`.  
+- `apellidos`: cadena. Ejemplo: `"González Pérez"`.  
+- `dni`: cadena. Ejemplo: `"12345678A"`.  
+- `fecha_contratacion`: fecha. Ejemplo: `2020-06-01`.
 
 ---
 
-### CLIENTE  
+### Cliente  
 **Descripción:** comprador; puede pertenecer a Tajinaste Plus.  
-**PK:** `id_cliente`  
 **Atributos:**  
-- `id_cliente` — ENTERO — Ej.: `200`.  
-- `nombre`, `apellidos` — CADENA — Ej.: `"Luis Martínez"`.  
-- `email` — CADENA — Ej.: `"luis@example.com"`.  
-- `telefono` — CADENA — Ej.: `"+34 600 123 456"`.  
-- `es_tajinaste_plus` — BOOLEANO — Ej.: `true`.  
-- `fecha_ingreso_plus` — FECHA (nullable) — Ej.: `2023-02-15` o `NULL`.  
-- `bono_mensual` — DECIMAL ≥ 0 (calculable) — Ej.: `5.00`.
+- `id_cliente`: entero, atributo identificador. Ejemplo: `200`.  
+- `nombre`, `apellidos`: cadena. Ejemplo: `"Luis Martínez"`.  
+- `email`: cadena. Ejemplo: `"luis@example.com"`.  
+- `telefono`: cadena. Ejemplo: `"+34 600 123 456"`.  
+- `es_tajinaste_plus`: booleano. Ejemplo: `true`.  
+- `fecha_ingreso_plus`: fecha. Ejemplo: `2023-02-15` o `NULL`.  
+- `bono_mensual`: decimal. Ejemplo: `5.00`.
 
 ---
 
-### PEDIDO  
+### Pedido  
 **Descripción:** orden de compra.  
-**PK:** `id_pedido`  
 **Atributos:**  
-- `id_pedido` — ENTERO — Ej.: `9001`.  
-- `id_cliente` — ENTERO (FK→CLIENTE) — Ej.: `200`.  
-- `id_empleado_responsable` — ENTERO (FK→EMPLEADO, NOT NULL) — Ej.: `501`.  
-- `fecha` — FECHA `YYYY-MM-DD` — Ej.: `2024-05-12`.  
-- `total` — DECIMAL ≥ 0 — Ej.: `78.40`.  
+- `id_pedido`: entero, atributo identificador. Ejemplo: `9001`.  
+- `id_cliente`: entero. Ejemplo: `200`.  
+- `id_empleado_responsable`: entero. Ejemplo: `501`.  
+- `fecha`: fecha. Ejemplo: `2024-05-12`.  
+- `total`: decimal. Ejemplo: `78.40`.  
 
 ---
 
-### PRODUCTIVIDAD_ZONA (entidad débil de ZONA)  
-**Descripción:** registro histórico mensual de una zona.  
-**PK completa:** (`id_vivero`, `codigo_zona`, `periodo`) donde `periodo` es PK parcial.  
-**Atributos:**  
-- `periodo` — CADENA `YYYY-MM` — Ej.: `"2024-05"`.  
-- `ventas_monetarias` — DECIMAL ≥ 0 — Ej.: `1540.75`.  
-- `unidades_vendidas` — ENTERO ≥ 0 — Ej.: `320`.  
+### Productividad zona (entidad débil de Zona)  
+**Descripción:** registro histórico mensual de una zona.   
+**Atributos:**
+- `id_prod_zona`: entero, atributo identificador. Ejemplo: `9001`.  
+- `periodo`: cadena. Ejemplo: `"2024-05"`.  
+- `ventas_monetarias`: decimal. Ejemplo: `1540.75`.  
+- `unidades_vendidas`: entero. Ejemplo: `320`.  
 
 ---
 
-### PRODUCTIVIDAD_EMPLEADO (entidad débil de EMPLEADO)  
+### Productividad empleado (entidad débil de Empleado)  
 **Descripción:** registro histórico mensual de un empleado.  
-**PK completa:** (`id_empleado`, `periodo`) donde `periodo` es PK parcial.  
 **Atributos:**  
-- `periodo` — CADENA `YYYY-MM` — Ej.: `"2024-05"`.  
-- `ventas_monetarias` — DECIMAL ≥ 0 — Ej.: `1200.00`.  
-- `pedidos_gestionados` — ENTERO ≥ 0 — Ej.: `18`. 
+- `id_prod_empleado`: entero, atributo identificador. Ejemplo: `9001`.  
+- `periodo`: fecha. Ejemplo: `"2024-05"`.  
+- `ventas_monetarias`: decimal. Ejemplo: `1200.00`.  
+- `pedidos_gestionados`: entero. Ejemplo: `18`. 
 
 ---
 
 ## Relaciones
 
-1. **VIVERO (1,1) — LOCALIZA — ZONA (0,N)**  
+1. **Vivero - contiene - Zona**  
    - Justificación: un vivero puede no tener zonas al crearse (0) o muchas (N); cada zona pertenece a un único vivero.  
    - Atributos de relación: ninguno.
 
