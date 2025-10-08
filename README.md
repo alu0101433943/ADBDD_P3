@@ -1,259 +1,153 @@
-# README — Modelo Entidad-Relación (Tajinaste S.A.)
-
-Este documento describe las entidades, atributos (dominio y ejemplos), relaciones y restricciones semánticas del modelo E/R diseñado para Tajinaste S.A. (diagrama en notación Chen).
+# Modelo Entidad-Relación (Tajinaste S.A.) 
 
 ---
 
 ## Entidades
 
-### VIVERO
-**Descripción:** Punto de venta/almacen físico de la empresa.  
-**Clave primaria:** `id_vivero`  
-**Atributos:**
-- `id_vivero` (ENTERO) — identificador único. Ej.: `1`, `42`.  
-- `nombre` (CADENA) — nombre comercial. Ej.: `"Vivero Norte"`.  
-- `direccion` (CADENA) — texto con dirección. Ej.: `"C/ Flores 10, Santa Cruz"`.  
-- `latitud` (DECIMAL) — coordenada geográfica, rango `[-90.0,90.0]`. Ej.: `28.4636`.  
-- `longitud` (DECIMAL) — coordenada geográfica, rango `[-180.0,180.0]`. Ej.: `-16.2518`.
+### VIVERO  
+**Descripción:** punto de venta/almacén físico.  
+**PK:** `id_vivero`  
+**Atributos:**  
+- `id_vivero` — ENTERO — Ej.: `1`.  
+- `nombre` — CADENA — Ej.: `"Vivero Norte"`.  
+- `direccion` — CADENA — Ej.: `"C/ Flores 10, Santa Cruz"`.  
+- `latitud` — DECIMAL ([-90,90]) — Ej.: `28.4636`.  
+- `longitud` — DECIMAL ([-180,180]) — Ej.: `-16.2518`.
 
 ---
 
-### ZONA (entidad débil, dependiente de VIVERO)
-**Descripción:** Área dentro de un vivero donde se colocan productos (p. ej. zona exterior, almacén). Su existencia depende del vivero.  
-**Clave parcial:** `nombre_zona` — la PK completa se forma combinando `id_vivero` + `nombre_zona`.  
-**Atributos:**
-- `id_vivero` (ENTERO) — referencia al vivero contenedor. Ej.: `1`.  
-- `nombre_zona` (CADENA) — nombre que identifica la zona dentro del vivero. Ej.: `"Zona Exterior"`.  
-- `descripcion` (CADENA) — descripción breve. Ej.: `"Zona de exposición de arbustos"`.  
-- `latitud` (DECIMAL) — coordenada de la zona (opcional, local). Ej.: `28.4637`.  
-- `longitud` (DECIMAL) — coordenada de la zona (opcional, local). Ej.: `-16.2519`.  
+### ZONA (entidad débil de VIVERO)  
+**Descripción:** área dentro del vivero (p. ej. zona exterior, almacén). Depende de VIVERO.  
+**Clave parcial / PK completa:** `codigo_zona` ; PK completa = (`id_vivero`, `codigo_zona`).  
+**Atributos:**  
+- `id_vivero` — ENTERO (FK→VIVERO) — Ej.: `1`.  
+- `codigo_zona` — CADENA corta — Ej.: `"ZEX"`.  
+- `nombre_zona` — CADENA — Ej.: `"Zona Exterior"`.  
+- `descripcion` — CADENA — Ej.: `"Exposición de arbustos"`.  
+- `latitud` — DECIMA — Ej.: `28.4637`.  
+- `longitud` — DECIMAL — Ej.: `-16.2519`.
 
 ---
 
-### PRODUCTO
-**Descripción:** Artículo vendible (plantas, herramientas, decoración).  
-**Clave primaria:** `id_producto`  
-**Atributos:**
-- `id_producto` (ENTERO) — identificador único. Ej.: `1001`.  
-- `nombre` (CADENA) — nombre comercial. Ej.: `"Rosal 'Red Eden'"`.  
-- `descripcion` (CADENA) — descripción técnica o comercial. Ej.: `"Rosal trepador, 40cm"`.  
-- `tipo` (CADENA) — categoría/tipo. Ej.: `"Planta"`, `"Herramienta"`.  
-- `precio_unitario` (DECIMAL) — precio por unidad en la moneda local. Ej.: `12.50`.
+### PRODUCTO  
+**Descripción:** artículo vendible.  
+**PK:** `id_producto`  
+**Atributos:**  
+- `id_producto` — ENTERO — Ej.: `1001`.  
+- `nombre` — CADENA — Ej.: `"Rosal 'Red Eden'"`.  
+- `descripcion` — CADENA — Ej.: `"Rosal trepador, 40cm"`.  
+- `tipo` — CADENA — Ej.: `"Planta"`.  
+- `precio_unitario` — DECIMAL ≥ 0 — Ej.: `12.50`.
 
 ---
 
-### EMPLEADO
-**Descripción:** Persona trabajadora que puede ser destinada a viveros y gestionar pedidos.  
-**Clave primaria:** `id_empleado`  
-**Atributos:**
-- `id_empleado` (ENTERO) — identificador único. Ej.: `501`.  
-- `nombre` (CADENA). Ej.: `"María"`.  
-- `apellidos` (CADENA). Ej.: `"González Pérez"`.  
-- `dni` (CADENA) — documento/número identificador. Ej.: `"12345678A"`.  
-- `fecha_contratacion` (FECHA, `YYYY-MM-DD`). Ej.: `2020-06-01`.
+### EMPLEADO  
+**Descripción:** trabajador que puede ser destinado a zonas y gestionar pedidos.  
+**PK:** `id_empleado`  
+**Atributos:**  
+- `id_empleado` — ENTERO — Ej.: `501`.  
+- `nombre` — CADENA — Ej.: `"María"`.  
+- `apellidos` — CADENA — Ej.: `"González Pérez"`.  
+- `dni` — CADENA — Ej.: `"12345678A"`.  
+- `fecha_contratacion` — FECHA `YYYY-MM-DD` — Ej.: `2020-06-01`.
 
 ---
 
-### CLIENTE
-**Descripción:** Persona que realiza compras. Algunos clientes pertenecen al programa de fidelización "Tajinaste Plus".  
-**Clave primaria:** `id_cliente`  
-**Atributos:**
-- `id_cliente` (ENTERO). Ej.: `200`.  
-- `nombre` (CADENA). Ej.: `"Luis"`.  
-- `apellidos` (CADENA). Ej.: `"Martínez"`.  
-- `email` (CADENA). Ej.: `"luis@example.com"`.  
-- `telefono` (CADENA). Ej.: `"+34 600 123 456"`.  
-- `es_tajinaste_plus` (BOOLEANO) — indica si pertenece al programa. Ej.: `true` / `false`.  
-- `fecha_ingreso_plus` (FECHA, nullable) — fecha en la que entró al programa. Ej.: `2023-02-15` o `NULL`.  
-- `bono_mensual` (DECIMAL, calculable/almacenable) — bonificación asignada según volumen de compras mensuales. Ej.: `5.00` (euros).
+### CLIENTE  
+**Descripción:** comprador; puede pertenecer a Tajinaste Plus.  
+**PK:** `id_cliente`  
+**Atributos:**  
+- `id_cliente` — ENTERO — Ej.: `200`.  
+- `nombre`, `apellidos` — CADENA — Ej.: `"Luis Martínez"`.  
+- `email` — CADENA — Ej.: `"luis@example.com"`.  
+- `telefono` — CADENA — Ej.: `"+34 600 123 456"`.  
+- `es_tajinaste_plus` — BOOLEANO — Ej.: `true`.  
+- `fecha_ingreso_plus` — FECHA (nullable) — Ej.: `2023-02-15` o `NULL`.  
+- `bono_mensual` — DECIMAL ≥ 0 (calculable) — Ej.: `5.00`.
 
 ---
 
-### PEDIDO
-**Descripción:** Orden de compra realizada por un cliente. Cada pedido tiene exactamente un responsable (empleado).  
-**Clave primaria:** `id_pedido`  
-**Atributos:**
-- `id_pedido` (ENTERO). Ej.: `9001`.  
-- `id_cliente` (ENTERO, FK→CLIENTE). Ej.: `200`.  
-- `id_empleado_responsable` (ENTERO, FK→EMPLEADO, no nulo). Ej.: `501`.  
-- `fecha` (FECHA). Ej.: `2024-05-12`.  
-- `total` (DECIMAL) — importe total del pedido. Ej.: `78.40`.
+### PEDIDO  
+**Descripción:** orden de compra.  
+**PK:** `id_pedido`  
+**Atributos:**  
+- `id_pedido` — ENTERO — Ej.: `9001`.  
+- `id_cliente` — ENTERO (FK→CLIENTE) — Ej.: `200`.  
+- `id_empleado_responsable` — ENTERO (FK→EMPLEADO, NOT NULL) — Ej.: `501`.  
+- `fecha` — FECHA `YYYY-MM-DD` — Ej.: `2024-05-12`.  
+- `total` — DECIMAL ≥ 0 — Ej.: `78.40`.  
 
 ---
 
-### DETALLE_PEDIDO (entidad asociativa PEDIDO–PRODUCTO)
-**Descripción:** Líneas de cada pedido (relación N:M).  
-**Clave primaria compuesta:** (`id_pedido`, `id_producto`)  
-**Atributos:**
-- `id_pedido` (ENTERO, FK→PEDIDO).  
-- `id_producto` (ENTERO, FK→PRODUCTO).  
-- `cantidad` (ENTERO) — unidades pedidas. Ej.: `3`.  
-- `precio_unitario_linea` (DECIMAL) — precio aplicado en la línea. Ej.: `12.50`.
+### PRODUCTIVIDAD_ZONA (entidad débil de ZONA)  
+**Descripción:** registro histórico mensual de una zona.  
+**PK completa:** (`id_vivero`, `codigo_zona`, `periodo`) donde `periodo` es PK parcial.  
+**Atributos:**  
+- `periodo` — CADENA `YYYY-MM` — Ej.: `"2024-05"`.  
+- `ventas_monetarias` — DECIMAL ≥ 0 — Ej.: `1540.75`.  
+- `unidades_vendidas` — ENTERO ≥ 0 — Ej.: `320`.  
 
 ---
 
-### PRODUCTIVIDAD_ZONA
-**Descripción:** Histórico de métricas de venta por zona y periodo (sirve para análisis de productividad).  
-**Clave primaria:** `id_prod_zona` (o PK compuesta `id_vivero`+`nombre_zona`+`periodo`)  
-**Atributos:**
-- `id_prod_zona` (ENTERO) — identificador de registro. Ej.: `7001`.  
-- `id_vivero` (ENTERO, FK→VIVERO).  
-- `nombre_zona` (CADENA, FK→ZONA).  
-- `periodo` (CADENA o `YYYY-MM`) — periodo de agregación. Ej.: `"2024-05"`.  
-- `ventas_monetarias` (DECIMAL). Ej.: `1540.75`.  
-- `unidades_vendidas` (ENTERO). Ej.: `320`.
+### PRODUCTIVIDAD_EMPLEADO (entidad débil de EMPLEADO)  
+**Descripción:** registro histórico mensual de un empleado.  
+**PK completa:** (`id_empleado`, `periodo`) donde `periodo` es PK parcial.  
+**Atributos:**  
+- `periodo` — CADENA `YYYY-MM` — Ej.: `"2024-05"`.  
+- `ventas_monetarias` — DECIMAL ≥ 0 — Ej.: `1200.00`.  
+- `pedidos_gestionados` — ENTERO ≥ 0 — Ej.: `18`. 
 
 ---
 
-### PRODUCTIVIDAD_EMPLEADO
-**Descripción:** Histórico de resultados por empleado y periodo.  
-**Clave primaria:** `id_prod_emp` (o PK compuesta `id_empleado`+`periodo`)  
-**Atributos:**
-- `id_prod_emp` (ENTERO). Ej.: `8001`.  
-- `id_empleado` (ENTERO, FK→EMPLEADO).  
-- `periodo` (CADENA o `YYYY-MM`). Ej.: `"2024-05"`.  
-- `ventas_monetarias` (DECIMAL). Ej.: `1200.00`.  
-- `pedidos_gestionados` (ENTERO). Ej.: `18`.
+## Relaciones
+
+1. **VIVERO (1,1) — LOCALIZA — ZONA (0,N)**  
+   - Justificación: un vivero puede no tener zonas al crearse (0) o muchas (N); cada zona pertenece a un único vivero.  
+   - Atributos de relación: ninguno.
+
+2. **ZONA (0,N) — STOCK — PRODUCTO (0,N)**
+  - Atributos de la relación STOCK:  
+     - `cantidad_disponible` — ENTERO ≥ 0 — Ej.: `25`.  
+     - `fecha_ultima_actualizacion` — FECHA `YYYY-MM-DD` — Ej.: `2024-05-10`.  
+   - Justificación: una zona o un producto pueden no estar relacionados aún (0).
+
+3. **EMPLEADO (0,N) — ASIGNACIÓN — ZONA (0,N)**   
+   - Enlace desde ASIGNACIÓN: ASIGNACIÓN → EMPLEADO `(1,1)` y ASIGNACIÓN → ZONA `(1,1)`.  
+   - Atributos de ASIGNACIÓN: `fecha_inicio` (FECHA / Ej. 2024-03-01), `fecha_fin` (FECHA nullable / Ej. 2024-05-31), `puesto` (CADENA / Ej. "Operario"), `observaciones` (CADENA opcional).  
+   - Justificación: empleado o zona pueden no tener asignaciones registradas (min=0); cada asignación vincula un empleado y una zona.
+
+4. **CLIENTE (0,N) — HACE — PEDIDO (1,1)**  
+   - Atributos en PEDIDO: `id_pedido`, `fecha`, `total`, `id_empleado_responsable` (NOT NULL), `id_vivero_suministro` (opcional), `codigo_zona_suministro` (opcional).  
+   - Justificación: cliente puede no haber hecho pedidos (0), pedido siempre tiene un cliente (1).
+
+5. **EMPLEADO (0,N) — GESTIONA — PEDIDO (1,1)**  
+   - Implementación: `id_empleado_responsable` en PEDIDO (FK NOT NULL).  
+   - Justificación: empleado puede no gestionar pedidos (0); cada pedido tiene exactamente un responsable (1).
+
+6. **PEDIDO (0,N) — DETALLE (entidad asociativa) — PRODUCTO (0,N)**  
+   - Enlace desde DETALLE: DETALLE → PEDIDO `(1,1)` y DETALLE → PRODUCTO `(1,1)`.  
+   - Atributos de DETALLE: `cantidad`, `precio_unitario_linea`, `descuento_linea` (opc.).  
+   - Justificación: pedido puede empezar sin líneas (0) o tener muchas; producto puede no aparecer en pedidos (0).
+
+7. **ZONA (1,1) — IDENTIFICA — PRODUCTIVIDAD_ZONA (0,N)**  *(PRODUCTIVIDAD_ZONA es entidad débil)*  
+   - Atributos de PRODUCTIVIDAD_ZONA: `periodo` (YYYY-MM), `ventas_monetarias`, `unidades_vendidas`, `objetivo_periodo` (opc.).  
+   - PK completa: (`id_vivero`, `codigo_zona`, `periodo`).  
+   - Justificación: una zona puede no tener registros aún (0); cada registro pertenece a una única zona (1).
+
+8. **EMPLEADO (1,1) — IDENTIFICA — PRODUCTIVIDAD_EMPLEADO (0,N)**  *(PRODUCTIVIDAD_EMPLEADO es entidad débil)*  
+   - Atributos de PRODUCTIVIDAD_EMPLEADO: `periodo`, `ventas_monetarias`, `pedidos_gestionados`, `cumplimiento_objetivo` (opc.).  
+   - PK completa: (`id_empleado`, `periodo`).  
+   - Justificación: empleado puede no tener registros (0); cada registro pertenece a un único empleado (1).
 
 ---
 
-## Relaciones (nombre, participantes, atributos de relación y cardinalidad)
+## Restricciones semánticas
 
-> Notación de cardinalidad: `(min,max)` junto a cada participante, donde `1` indica exactamente uno y `N` indica muchos.
-
-### 1. VIVERO — IDENTIFICA — ZONA  
-**Tipo:** relación de identificación (identifying).  
-**Participantes y cardinalidad:**  
-- VIVERO `(1,1)` — IDENTIFICA — ZONA `(1,N)`  
-**Semántica:** Un vivero identifica (contiene) una o muchas zonas; una zona pertenece a exactamente un vivero. ZONA es entidad débil.  
-**Atributos de relación:** ninguno.  
-**Ejemplo:** VIVERO `1` identifica `Zona Exterior`, `Almacén`.
-
----
-
-### 2. ZONA — STOCK/UBICACIÓN — PRODUCTO  
-**Tipo:** relación N:M (relación con atributos) — modela el stock por zona.  
-**Participantes y cardinalidad:**  
-- ZONA `(1,N)` — STOCK — PRODUCTO `(1,N)`  
-(Interpretación: una zona puede contener muchos productos; un producto puede estar presente en muchas zonas.)  
-**Atributos de la relación STOCK:**  
-- `cantidad_disponible` (ENTERO) — unidades en esa zona. Ej.: `25`.  
-- `fecha_ultima_actualizacion` (FECHA) — fecha del último ajuste de stock. Ej.: `2024-05-10`.  
-**Semántica:** Permite saber cuánto hay disponible de cada producto en cada zona del vivero.  
-**Ejemplo:** En `Vivero 1 / Zona Exterior`, `Producto 1001` tiene `cantidad_disponible = 12`.
-
----
-
-### 3. EMPLEADO — ASIGNACIÓN — ZONA  
-**Tipo:** relación N:N con atributos temporales (registra histórico).  
-**Participantes y cardinalidad:**  
-- EMPLEADO `(1,N)` — ASIGNACIÓN — ZONA `(1,N)`  
-(Interpretación temporal: un empleado puede tener múltiples asignaciones a lo largo del tiempo; una zona puede recibir distintos empleados a lo largo del tiempo.)  
-**Atributos de la relación ASIGNACIÓN:**  
-- `fecha_inicio` (FECHA). Ej.: `2024-03-01`.  
-- `fecha_fin` (FECHA, nullable). Ej.: `2024-09-30` o `NULL` si vigente.  
-- `puesto` (CADENA). Ej.: `"Encargado de ventas"`.  
-- `observaciones` (CADENA, opcional).  
-**Semántica:** Registra en qué zona y en qué periodo trabajó un empleado (necesario para la trazabilidad y cálculo de productividad).  
-**Ejemplo:** EMPLEADO `501` asignado a `Vivero 1 / Zona Exterior` desde `2024-03-01` hasta `2024-05-31`.
-
----
-
-### 4. CLIENTE — HACE — PEDIDO  
-**Tipo:** relación 1:N (un cliente hace muchos pedidos).  
-**Participantes y cardinalidad:**  
-- CLIENTE `(1,N)` — HACE — PEDIDO `(1,1)` (desde la perspectiva de PEDIDO: pertenece a exactamente un CLIENTE)  
-**Atributos de la relación:** ninguno (los atributos están en PEDIDO).  
-**Semántica:** Historial de compras por cliente; para campañas se consideran los pedidos realizados desde `fecha_ingreso_plus` si `es_tajinaste_plus = true`.  
-**Ejemplo:** CLIENTE `200` hizo PEDIDO `9001` el `2024-05-12`.
-
----
-
-### 5. EMPLEADO — GESTIONA — PEDIDO  
-**Tipo:** relación 1:N (un empleado gestiona muchos pedidos; cada pedido tiene exactamente un responsable).  
-**Participantes y cardinalidad:**  
-- EMPLEADO `(1,N)` — GESTIONA — PEDIDO `(1,1)` (desde PEDIDO: `id_empleado_responsable` no nulo)  
-**Atributos de la relación:** ninguno adicional (el FK `id_empleado_responsable` se almacena en PEDIDO).  
-**Semántica:** Asociación obligatoria: cada pedido tiene un empleado responsable. Esta relación permite medir el cumplimiento de objetivos de venta por empleado.  
-**Ejemplo:** EMPLEADO `501` responsable del PEDIDO `9001`.
-
----
-
-### 6. PEDIDO — DETALLE_PEDIDO — PRODUCTO  
-**Tipo:** relación N:M implementada mediante entidad asociativa DETALLE_PEDIDO.  
-**Participantes y cardinalidad:**  
-- PEDIDO `(1,N)` — DETALLE_PEDIDO — PRODUCTO `(1,N)`  
-**Atributos en DETALLE_PEDIDO:** `cantidad`, `precio_unitario_linea`.  
-**Semántica:** Describe las líneas de cada pedido (qué productos y cuántas unidades).  
-**Ejemplo:** En PEDIDO `9001`, DETALLE: `id_producto=1001`, `cantidad=3`, `precio_unitario_linea=12.50`.
-
----
-
-### 7. PRODUCTIVIDAD_ZONA — registra métricas por (VIVERO,ZONA,PERIODO)
-**Tipo:** entidad de histórico (N:1 respecto a ZONA por periodo).  
-**Participantes y cardinalidad:**  
-- PRODUCTIVIDAD_ZONA `(N,1)` → ZONA `(1,1)` (varios registros históricos por una misma zona, uno por periodo)  
-**Atributos:** `periodo`, `ventas_monetarias`, `unidades_vendidas`.  
-**Semántica:** Almacena agregados para análisis y comparativas.
-
----
-
-### 8. PRODUCTIVIDAD_EMPLEADO — registra métricas por (EMPLEADO,PERIODO)
-**Tipo:** entidad de histórico (N:1 respecto a EMPLEADO por periodo).  
-**Participantes y cardinalidad:**  
-- PRODUCTIVIDAD_EMPLEADO `(N,1)` → EMPLEADO `(1,1)`  
-**Atributos:** `periodo`, `ventas_monetarias`, `pedidos_gestionados`.  
-**Semántica:** Almacena métricas para evaluación de objetivos.
-
----
-
-## Claves primarias / foráneas (resumen)
-- PK VIVERO: `id_vivero`.  
-- PK ZONA (componente débil): (`id_vivero`, `nombre_zona`).  
-- PK PRODUCTO: `id_producto`.  
-- PK EMPLEADO: `id_empleado`.  
-- PK CLIENTE: `id_cliente`.  
-- PK PEDIDO: `id_pedido`.  
-- PK DETALLE_PEDIDO: (`id_pedido`, `id_producto`).  
-- PRODUCTIVIDAD_ZONA y PRODUCTIVIDAD_EMPLEADO pueden usar PK compuestas por (`id_vivero`,`nombre_zona`,`periodo`) y (`id_empleado`,`periodo`) respectivamente, o un id autonumérico.
-
-**FKs importantes:**  
-- ZONA.id_vivero → VIVERO.id_vivero.  
-- PRODUCTIVIDAD_ZONA → ZONA (id_vivero + nombre_zona).  
-- PEDIDO.id_cliente → CLIENTE.id_cliente.  
-- PEDIDO.id_empleado_responsable → EMPLEADO.id_empleado.  
-- DETALLE_PEDIDO.id_pedido → PEDIDO.id_pedido.  
-- DETALLE_PEDIDO.id_producto → PRODUCTO.id_producto.  
-- STOCK (si se implementa como tabla/entidad) FK a ZONA y PRODUCTO.
-
----
-
-## Restricciones semánticas (reglas de negocio y restricciones adicionales)
-
-1. **Entidad débil ZONA:** una zona sólo existe si existe su vivero contenedor; la PK real de la zona es la combinación `(id_vivero, nombre_zona)`.  
-2. **Un empleado nunca tiene dos destinos simultáneos:** no deben existir dos registros de ASIGNACIÓN para el mismo `id_empleado` cuyos intervalos `[fecha_inicio, fecha_fin]` se solapen (salvo si `fecha_fin` es NULL y otro periodo vigente). Esta restricción requiere comprobación temporal al insertar/actualizar.  
-3. **Pedido con responsable obligatorio:** `PEDIDO.id_empleado_responsable` es NOT NULL; cada pedido tiene exactamente un empleado responsable.  
-4. **Stock coherente:** `STOCK.cantidad_disponible` ≥ 0. Al confirmar un pedido, las cantidades en DETALLE_PEDIDO deben restarse del stock correspondiente en las zonas afectadas; la política de depleción (desde qué zona) se define por reglas operativas (no modeladas aquí).  
-5. **Pedidos para campañas Tajinaste Plus:** para campañas o cálculos basados en pertenencia `es_tajinaste_plus = true`, sólo se consideran los pedidos cuya `fecha` ≥ `fecha_ingreso_plus` del CLIENTE.  
-6. **Integridad referencial:** no se puede eliminar un VIVERO si existen ZONAS asociadas (o en su lugar eliminar en cascada según política). Similar para otros FKs.  
-7. **PKs y unicidad:** `id_*` deben ser únicos por entidad. DETALLE_PEDIDO no debe permitir duplicados `(id_pedido,id_producto)`; si se repite, sumar cantidades o impedir la inserción.  
-8. **Formato y dominios:**  
-   - Fechas en formato `YYYY-MM-DD`.  
-   - Periodo en `YYYY-MM` para agregaciones mensuales.  
-   - Coordenadas lat/long dentro de sus rangos.  
-9. **Atributos derivados:** `bono_mensual` en CLIENTE es calculable desde `PEDIDO` agregados por periodo; puede ser almacenado para rendimiento, pero su valor debe poder recalcularse.
-
----
-
-## Ejemplos ilustrativos rápidos
-- **Stock:** `(id_vivero=1, nombre_zona="Zona Exterior", id_producto=1001) -> cantidad_disponible=12, fecha_ultima_actualizacion=2024-05-10`.  
-- **Asignación:** `(id_empleado=501, id_vivero=1, nombre_zona="Almacén") -> fecha_inicio=2024-03-01, fecha_fin=2024-04-30, puesto="Operario"`.  
-- **Pedido y detalle:** `PEDIDO id=9001, id_cliente=200, id_empleado_responsable=501, fecha=2024-05-12, total=78.40`. DETALLE: `(9001,1001,cantidad=3,precio_unitario_linea=12.50)`.
-
----
-
-## Notas finales
-- El modelo aplica **única y exclusivamente** los conceptos del modelo Entidad-Relación (entidad, atributo, relación, entidad débil, atributos de relación, cardinalidad y participación, y registro histórico mediante relaciones con atributos temporales).  
-- Para pasar del esquema E/R a la implementación relacional conviene transformar: entidades → tablas; entidades débiles → tabla con PK compuesta; relaciones N:M con atributos → tablas intermedias (ej. STOCK, DETALLE_PEDIDO); relaciones 1:N → FK en la tabla del lado N (ej. PEDIDO → FK a CLIENTE y EMPLEADO).
-
----
+1. **ZONA es entidad débil:** PK completa `(id_vivero, codigo_zona)`. No existe ZONA sin VIVERO.  
+2. **PRODUCTIVIDAD_* son ent. débiles:** PK completa incluye la clave del padre + `periodo`. No existe registro de productividad sin su padre (ZONA o EMPLEADO).  
+3. **Empleado sin doble destino simultáneo:** para cada `id_empleado` no deben existir dos ASIGNACIÓN cuyos intervalos `[fecha_inicio, fecha_fin]` se solapen (salvo `NULL` en `fecha_fin` que indica vigente). Comprobación a nivel de aplicación o trigger.  
+4. **PEDIDO con responsable obligatorio:** `id_empleado_responsable` en PEDIDO es NOT NULL.  
+5. **STOCK no negativo:** `cantidad_disponible >= 0`. Al confirmar un pedido, las cantidades en DETALLE se restan del STOCK pertinente (política de elección de zona de depleción fuera del E/R).  
+6. **DETALLE_PEDIDO único por línea:** no permitir duplicados `(id_pedido, id_producto)`; actualizar cantidad si se reingresa la misma línea según política.  
+7. **Campañas Tajinaste Plus:** para análisis considerar solo PEDIDO con `fecha >= fecha_ingreso_plus` cuando `es_tajinaste_plus = true`.  
+8. **Formatos y dominios:** fechas `YYYY-MM-DD`; periodo `YYYY-MM`; lat/long dentro de rangos; cantidades/precios ≥ 0.
