@@ -96,43 +96,48 @@
 
 ## Relaciones
 
-1. **Vivero - contiene - Zona**  
-   - Justificación: un vivero puede no tener zonas al crearse (0) o muchas (N); cada zona pertenece a un único vivero.  
-   - Atributos de relación: ninguno.
+1. **Vivero - tiene - Zona**
+- Cardinalidad: 1:N
+- Justificación: una zona pertenece a un único vivero, un vivero tiene una o más zonas.
+- Atributos de relación: ninguno.
 
-2. **ZONA (0,N) — STOCK — PRODUCTO (0,N)**
-  - Atributos de la relación STOCK:  
-     - `cantidad_disponible` — ENTERO ≥ 0 — Ej.: `25`.  
-     - `fecha_ultima_actualizacion` — FECHA `YYYY-MM-DD` — Ej.: `2024-05-10`.  
-   - Justificación: una zona o un producto pueden no estar relacionados aún (0).
+2. **Zona - asigna - Producto**
+- Atributos:  
+  - `cantidad_disponible`: entero. Ejemplo: `25`.  
+  - `fecha_ultima_actualizacion`: fecha. Ejemplo: `2024-05-10`.
+- Cardinalidad: N:M
+- Justificación: cada producto puede estar asignado en 0 o más zonas, cada zona puede tener asignado 0 o más productos.
 
-3. **EMPLEADO (0,N) — ASIGNACIÓN — ZONA (0,N)**   
-   - Enlace desde ASIGNACIÓN: ASIGNACIÓN → EMPLEADO `(1,1)` y ASIGNACIÓN → ZONA `(1,1)`.  
-   - Atributos de ASIGNACIÓN: `fecha_inicio` (FECHA / Ej. 2024-03-01), `fecha_fin` (FECHA nullable / Ej. 2024-05-31), `puesto` (CADENA / Ej. "Operario"), `observaciones` (CADENA opcional).  
-   - Justificación: empleado o zona pueden no tener asignaciones registradas (min=0); cada asignación vincula un empleado y una zona.
+3. **Empleado - asignación - Zona**   
+- Atributos:
+  - `puesto`: cadena. Ejemplo: `supervisor`.  
+  - `fecha_inicio`: fecha. Ejemplo: `2024-05-10`.
+  - `fecha_fin`: fecha. Ejemplo: `2024-05-10`.
+- Cardinalidad: 1:1
+- Justificación: empleado o zona pueden no tener asignaciones registradas. Cada asignación vincula un empleado y una zona.
 
-4. **CLIENTE (0,N) — HACE — PEDIDO (1,1)**  
-   - Atributos en PEDIDO: `id_pedido`, `fecha`, `total`, `id_empleado_responsable` (NOT NULL), `id_vivero_suministro` (opcional), `codigo_zona_suministro` (opcional).  
-   - Justificación: cliente puede no haber hecho pedidos (0), pedido siempre tiene un cliente (1).
+4. **Cliente - hace - Pedido**
+- Cardinalidad: 1:N
+- Justificación: un cliente existe desde que hace un pedido, por tanto tiene al menos 1 y pueden ser más. Un pedido es realizado por un único cliente.
 
-5. **EMPLEADO (0,N) — GESTIONA — PEDIDO (1,1)**  
-   - Implementación: `id_empleado_responsable` en PEDIDO (FK NOT NULL).  
-   - Justificación: empleado puede no gestionar pedidos (0); cada pedido tiene exactamente un responsable (1).
+5. **Empleado - gestiona - Pedido**  
+- Cardinalidad: 1:N
+- Justificación: un empleado puede no gestionar pedidos, gestionar uno o múltiples de ellos. Cada pedido tiene exactamente un responsable.
 
-6. **PEDIDO (0,N) — DETALLE (entidad asociativa) — PRODUCTO (0,N)**  
-   - Enlace desde DETALLE: DETALLE → PEDIDO `(1,1)` y DETALLE → PRODUCTO `(1,1)`.  
-   - Atributos de DETALLE: `cantidad`, `precio_unitario_linea`, `descuento_linea` (opc.).  
-   - Justificación: pedido puede empezar sin líneas (0) o tener muchas; producto puede no aparecer en pedidos (0).
+6. **Pedido - incluye - Producto**
+- Cardinalidad: N:M
+- Atributos:
+  - `precio_unitario_linea`: decimal. Ejemplo: `57.25`.  
+  - `cantidad`: fecha. Ejemplo: `2024-05-10`. 
+- Justificación: un pedido incluye uno o más productos. Un producto puede no estar incluido en ningún pedido, estarlo en uno o múltiple de ellos.
 
-7. **ZONA (1,1) — IDENTIFICA — PRODUCTIVIDAD_ZONA (0,N)**  *(PRODUCTIVIDAD_ZONA es entidad débil)*  
-   - Atributos de PRODUCTIVIDAD_ZONA: `periodo` (YYYY-MM), `ventas_monetarias`, `unidades_vendidas`, `objetivo_periodo` (opc.).  
-   - PK completa: (`id_vivero`, `codigo_zona`, `periodo`).  
-   - Justificación: una zona puede no tener registros aún (0); cada registro pertenece a una única zona (1).
+7. **Zona - se evalua - Productividad zona**
+- Cardinalidad: 1:N
+- Justificación: una zona puede no tener registros aún o tener múltiples de ellos. Cada registro pertenece a una única zona.
 
-8. **EMPLEADO (1,1) — IDENTIFICA — PRODUCTIVIDAD_EMPLEADO (0,N)**  *(PRODUCTIVIDAD_EMPLEADO es entidad débil)*  
-   - Atributos de PRODUCTIVIDAD_EMPLEADO: `periodo`, `ventas_monetarias`, `pedidos_gestionados`, `cumplimiento_objetivo` (opc.).  
-   - PK completa: (`id_empleado`, `periodo`).  
-   - Justificación: empleado puede no tener registros (0); cada registro pertenece a un único empleado (1).
+8. **Empleado - se evalua — Productividad empleado** 
+- Cardinalidad: 1:N
+- Justificación: un empleado puede no tener registros aún o tener múltiples de ellos. Cada registro pertenece a un único empleado.
 
 ---
 
