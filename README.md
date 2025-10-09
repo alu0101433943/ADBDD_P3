@@ -9,14 +9,14 @@
 **Atributos:**  
 - `Código vivero`: entero, atributo identificador. Ejemplo: `1`.  
 - `Nombre`: cadena. Ejemplo.: `"Vivero Norte"`.  
-- `Dirección`: cadena. Ejemplo: `"C/ Flores 10, Santa Cruz"`.  
+- `Dirección`: cadena, atributo compuesto (Calle, Nombre y Número, las tres cadenas). Ejemplo: `"C/ Flores 10, Santa Cruz"`.  
 - `Latitud`: decimal. Ejemplo: `28.4636`.  
 - `Longitud`: decimal. Ejemplo: `-16.2518`.
 
 ---
 
 ### Zona (entidad débil de Vivero)  
-**Descripción:** área dentro del vivero (p. ej. zona exterior, almacén). Depende de Vivero.  
+**Descripción:** área dentro del vivero (zona exterior, almacén, etc.). Depende de Vivero.  
 **Atributos:**
 - `Código zona`: entero, atributo identificador. Ejemplo: `1`.  
 - `Nombre zona`: cadena. Ejemplo: `"Zona Exterior"`.  
@@ -74,7 +74,7 @@
 **Descripción:** registro histórico mensual de una zona.   
 **Atributos:**
 - `Código productividad zona`: cadena, atributo identificador. Ejemplo: `UFZ2`.
-- `Periodo`: fechas. Atributo compuesto (fecha inicio, fecha fin). Ejemplo: `2024-05, 2024-07`.  
+- `Periodo`: fechas. Atributo compuesto (Fecha inicio y Fecha fin, las dos fechas). Ejemplo: `2024-05, 2024-07`.
 - `Ventas monetarias`: decimal. Ejemplo: `1540.75`.  
 - `Unidades vendidas`: entero. Ejemplo: `320`.  
 
@@ -84,7 +84,7 @@
 **Descripción:** registro histórico mensual de un empleado.  
 **Atributos:**  
 - `Código productividad empleado`: cadena, atributo identificador. Ejemplo: `5FH4`.  
-- `Periodo`: fechas. Atributo compuesto (fecha inicio, fecha fin). Ejemplo: `"2024-05, 2024-07"`.  
+- `Periodo`: fechas. Atributo compuesto (Fecha inicio y Fecha fin, las dos fechas). Ejemplo: `"2024-05, 2024-07"`.  
 - `Ventas monetarias`: decimal. Ejemplo: `1200.00`.  
 - `Pedidos gestionados`: entero. Ejemplo: `18`. 
 
