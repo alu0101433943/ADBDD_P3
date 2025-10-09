@@ -7,34 +7,32 @@
 ### Vivero  
 **Descripción:** punto de venta/almacén físico.  
 **Atributos:**  
-- `id_vivero`: entero, atributo identificador. Ejemplo: `1`.  
-- `nombre`: cadena. Ejemplo.: `"Vivero Norte"`.  
-- `direccion`: cadena. Ejemplo: `"C/ Flores 10, Santa Cruz"`.  
-- `latitud`: decimal. Ejemplo: `28.4636`.  
-- `longitud`: decimal. Ejemplo: `-16.2518`.
+- `Código vivero`: entero, atributo identificador. Ejemplo: `1`.  
+- `Nombre`: cadena. Ejemplo.: `"Vivero Norte"`.  
+- `Dirección`: cadena. Ejemplo: `"C/ Flores 10, Santa Cruz"`.  
+- `Latitud`: decimal. Ejemplo: `28.4636`.  
+- `Longitud`: decimal. Ejemplo: `-16.2518`.
 
 ---
 
 ### Zona (entidad débil de Vivero)  
 **Descripción:** área dentro del vivero (p. ej. zona exterior, almacén). Depende de Vivero.  
-**Atributos:**  
-- `id_zona`: Formado a partir del id_vivero (clave foránea) y codigo_zona.
-- `id_vivero`: entero. Ejemplo: `1`.  
-- `codigo_zona`: cadena. Ejemplo: `"ZEX"`.  
-- `nombre_zona`: cadena. Ejemplo: `"Zona Exterior"`.  
-- `descripcion`: cadena. Ejemplo: `"Exposición de arbustos"`.  
-- `latitud`: decimal. Ejemplo: `28.4637`.  
-- `longitud`: decimal. Ejemplo: `-16.2519`.
+**Atributos:**
+- `Código zona`: entero, atributo identificador. Ejemplo: `1`.  
+- `Nombre zona`: cadena. Ejemplo: `"Zona Exterior"`.  
+- `Descripción`: cadena. Ejemplo: `"Exposición de arbustos"`.  
+- `Latitud`: decimal. Ejemplo: `28.4637`.  
+- `Longitud`: decimal. Ejemplo: `-16.2519`.
 
 ---
 
 ### Producto  
 **Descripción:** artículo vendible.    
 **Atributos:**  
-- `id_producto`: entero, atributo identificador. Ej.: `1001`.  
+- `Código producto`: entero, atributo identificador. Ej.: `1001`.  
 - `nombre`: cadena. Ejemplo: `"Rosal 'Red Eden'"`.  
 - `descripcion`: cadena. Ejemplo: `"Rosal trepador, 40cm"`.  
-- `tipo`: cadena. Ejemplo: `"Planta"`.  
+- `tipo`: cadena, atributo multivaluado (un producto puede pertenecer a múltiples categorías). Ejemplo: `"Planta"`.  
 - `precio_unitario`: decimal. Ej.: `12.50`.
 
 ---
@@ -42,31 +40,31 @@
 ### Empleado  
 **Descripción:** trabajador que puede ser destinado a zonas y gestionar pedidos.
 **Atributos:**  
-- `id_empleado`: entero, atributo identificador. Ejemplo: `501`.  
-- `nombre`: cadena. Ejemplo: `"María"`.  
-- `apellidos`: cadena. Ejemplo: `"González Pérez"`.  
-- `dni`: cadena. Ejemplo: `"12345678A"`.  
-- `fecha_contratacion`: fecha. Ejemplo: `2020-06-01`.
+- `Código empleado`: entero, atributo identificador. Ejemplo: `501`.  
+- `Nombre`: cadena. Ejemplo: `"María"`.  
+- `Apellidos`: cadena. Ejemplo: `"González Pérez"`.  
+- `DNI`: cadena. Ejemplo: `"12345678A"`.  
+- `Fecha Contratación`: fecha. Ejemplo: `2020-06-01`.
 
 ---
 
 ### Cliente  
 **Descripción:** comprador; puede pertenecer a Tajinaste Plus.  
 **Atributos:**  
-- `id_cliente`: entero, atributo identificador. Ejemplo: `200`.  
-- `nombre`, `apellidos`: cadena. Ejemplo: `"Luis Martínez"`.  
-- `email`: cadena. Ejemplo: `"luis@example.com"`.  
-- `telefono`: cadena. Ejemplo: `"+34 600 123 456"`.  
-- `es_tajinaste_plus`: booleano. Ejemplo: `true`.  
-- `fecha_ingreso_plus`: fecha. Ejemplo: `2023-02-15` o `NULL`.  
-- `bono_mensual`: decimal. Ejemplo: `5.00`.
+- `Código cliente`: entero, atributo identificador. Ejemplo: `200`.  
+- `Nombre`, `Apellidos`: cadena. Ejemplo: `"Luis Martínez"`.  
+- `Email`: cadena, atributo multivaluado (un cliente puede tener vinculados múltiples emails). Ejemplo: `"luis@example.com"`.  
+- `Teléfono`: cadena, atributo multivaluado (un cliente puede tener vinculados múltiples teléfonos). Ejemplo: `"+34 600 123 456"`.  
+- `Es Tajinaste Plus`: booleano. Ejemplo: `true`.  
+- `Fecha ingreso Plus`: fecha. Ejemplo: `2023-02-15` o `NULL`.  
+- `Bono mensual`: decimal, atributo calculado. Ejemplo: `5.00`.
 
 ---
 
 ### Pedido  
 **Descripción:** orden de compra.  
 **Atributos:**  
-- `id_pedido`: entero, atributo identificador. Ejemplo: `9001`.  
+- `Código pedido`: entero, atributo identificador. Ejemplo: `9001`.  
 - `id_cliente`: entero. Ejemplo: `200`.  
 - `id_empleado_responsable`: entero. Ejemplo: `501`.  
 - `fecha`: fecha. Ejemplo: `2024-05-12`.  
