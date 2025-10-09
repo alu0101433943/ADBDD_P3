@@ -137,13 +137,48 @@
 
 ---
 
-## Restricciones semánticas
+# Restricciones semánticas
 
-1. **ZONA es entidad débil:** PK completa `(id_vivero, codigo_zona)`. No existe ZONA sin VIVERO.  
-2. **PRODUCTIVIDAD_* son ent. débiles:** PK completa incluye la clave del padre + `periodo`. No existe registro de productividad sin su padre (ZONA o EMPLEADO).  
-3. **Empleado sin doble destino simultáneo:** para cada `id_empleado` no deben existir dos ASIGNACIÓN cuyos intervalos `[fecha_inicio, fecha_fin]` se solapen (salvo `NULL` en `fecha_fin` que indica vigente). Comprobación a nivel de aplicación o trigger.  
-4. **PEDIDO con responsable obligatorio:** `id_empleado_responsable` en PEDIDO es NOT NULL.  
-5. **STOCK no negativo:** `cantidad_disponible >= 0`. Al confirmar un pedido, las cantidades en DETALLE se restan del STOCK pertinente (política de elección de zona de depleción fuera del E/R).  
-6. **DETALLE_PEDIDO único por línea:** no permitir duplicados `(id_pedido, id_producto)`; actualizar cantidad si se reingresa la misma línea según política.  
-7. **Campañas Tajinaste Plus:** para análisis considerar solo PEDIDO con `fecha >= fecha_ingreso_plus` cuando `es_tajinaste_plus = true`.  
-8. **Formatos y dominios:** fechas `YYYY-MM-DD`; periodo `YYYY-MM`; lat/long dentro de rangos; cantidades/precios ≥ 0.
+1. **Zona es entidad débil**: una Zona no existe fuera de un Vivero.
+
+2. **Productividad es histórica y depende del "padre"**  
+   - Regla: cada registro de productividad pertenece a una única Zona o Empleado y se identifica por el periodo. 
+   - Aplicación: no permitir registros huérfanos.
+
+3. **Stock único por (Vivero, Zona, Producto) y no negativo**  
+   - Regla: existir a lo sumo una entrada de stock por combinación y `cantidad >= 0`.  
+
+4. **Detalle de pedido único por (Pedido, Producto)**  
+   - Regla: cada línea de pedido es única. Si se reingresa el mismo producto se actualiza la cantidad.  
+   - Ejemplo: un pedido no puede tener dos filas separadas del mismo producto.  
+
+5. **Empleado: un único destino a la vez (no solapamiento)**  
+   - Regla: no pueden existir dos asignaciones para el mismo empleado con intervalos que se solapan. `Fecha fin` nula = vigente.  
+   - Ejemplo: si A cubre 2024-05-01 -> no puede crearse otra con inicio dentro de ese intervalo.  
+
+6. **Pedido tiene responsable obligatorio**  
+   - Regla: todo Pedido debe tener un empleado responsable.  
+
+7. **Responsable debe estar asignado en la fecha del pedido**  
+   - Regla: el empleado responsable del pedido debe tener una asignación cuyo intervalo cubra la `fecha` del pedido (y al menos pertenecer al mismo vivero si aplica).  
+   - Ejemplo: si el pedido es 2024-06-10, la asignación del empleado debe incluir esa fecha.
+
+8. **Consistencia del total del pedido**  
+   - Regla: `Pedido.Total` debe reflejar la suma de sus líneas (cantidad × precio_unitario).  
+   - Ejemplo: si las líneas suman 78.40, el total no puede ser 80.00.
+
+9. **Confirmación de pedido requiere stock suficiente**  
+   - Regla: no confirmar/servir un pedido si la/s zona/s seleccionadas no tienen suficiente stock.  
+   - Ejemplo: stock en zona A = 10, pedido pide 12 -> bloqueo o desvío.  
+
+10. **Pedidos para Tajinaste Plus**  
+    - Regla: para análisis/campañas sólo contar pedidos con `Fecha >= Fecha ingreso Plus` y para clientes con `Es Tajinaste Plus = TRUE`.  
+    - Ejemplo: cliente entró 2024-03-15 -> sólo pedidos desde esa fecha se consideran.
+
+11. **Dominios válidos y orden temporal**  
+    - Regla: latitud ∈ [-90,90], longitud ∈ [-180,180]. `Fecha fin` es NULL o ≥ `Fecha inicio`. Precios/Cantidades ≥ 0. Fechas con formato ISO.  
+    - Ejemplo: latitud 95.0 -> inválida.
+
+12. **Identificadores únicos y normalización de multivaluados**  
+    - Regla: DNI único por empleado. Normalizar emails/teléfonos a tablas relacionadas (un email/telefono por fila).  
+    - Ejemplo: no aceptar dos empleados con mismo DNI.
