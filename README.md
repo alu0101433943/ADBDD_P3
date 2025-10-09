@@ -153,7 +153,7 @@
    - Ejemplo: un pedido no puede tener dos filas separadas del mismo producto.  
 
 5. **Empleado: un único destino a la vez (no solapamiento)**  
-   - Regla: no pueden existir dos asignaciones para el mismo empleado con intervalos que se solapan. `Fecha fin` nula = vigente.  
+   - Regla: no pueden existir dos asignaciones para el mismo empleado con intervalos que se solapan..  
    - Ejemplo: si A cubre 2024-05-01 -> no puede crearse otra con inicio dentro de ese intervalo.  
 
 6. **Pedido tiene responsable obligatorio**  
