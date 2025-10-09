@@ -18,7 +18,7 @@
 ### Zona (entidad débil de Vivero)  
 **Descripción:** área dentro del vivero (p. ej. zona exterior, almacén). Depende de Vivero.  
 **Atributos:**  
-- `id_zona`: entero. Formado a partir del id_vivero (clave foránea) y codigo_zona.
+- `id_zona`: Formado a partir del id_vivero (clave foránea) y codigo_zona.
 - `id_vivero`: entero. Ejemplo: `1`.  
 - `codigo_zona`: cadena. Ejemplo: `"ZEX"`.  
 - `nombre_zona`: cadena. Ejemplo: `"Zona Exterior"`.  
@@ -77,8 +77,8 @@
 ### Productividad zona (entidad débil de Zona)  
 **Descripción:** registro histórico mensual de una zona.   
 **Atributos:**
-- `id_prod_zona`: entero, atributo identificador. Ejemplo: `9001`.  
-- `periodo`: cadena. Ejemplo: `"2024-05"`.  
+- `id_prod_zona`: (id_vivero + nombre_zona + periodo), atributo identificador. Ejemplo: `1-Zona exterior-2024-05/2024-07`.
+- `periodo`: fechas. Atributo compuesto (fecha inicio, fecha fin). Ejemplo: `2024-05, 2024-07`.  
 - `ventas_monetarias`: decimal. Ejemplo: `1540.75`.  
 - `unidades_vendidas`: entero. Ejemplo: `320`.  
 
@@ -87,8 +87,8 @@
 ### Productividad empleado (entidad débil de Empleado)  
 **Descripción:** registro histórico mensual de un empleado.  
 **Atributos:**  
-- `id_prod_empleado`: entero, atributo identificador. Ejemplo: `9001`.  
-- `periodo`: fecha. Ejemplo: `"2024-05"`.  
+- `id_prod_empleado`: (id_empleado + periodo), atributo identificador. Ejemplo: `501-2024-05/2024-07`.  
+- `periodo`: fechas. Atributo compuesto (fecha inicio, fecha fin). Ejemplo: `"2024-05, 2024-07"`.  
 - `ventas_monetarias`: decimal. Ejemplo: `1200.00`.  
 - `pedidos_gestionados`: entero. Ejemplo: `18`. 
 
@@ -96,46 +96,46 @@
 
 ## Relaciones
 
-1. **Vivero - tiene - Zona**
+1. **Vivero - tiene - Zona: relación identificadora**
 - Cardinalidad: 1:N
 - Justificación: una zona pertenece a un único vivero, un vivero tiene una o más zonas.
 - Atributos de relación: ninguno.
 
-2. **Zona - asigna - Producto**
+2. **Zona - asigna (stock) - Producto: relación con atributos**
 - Atributos:  
   - `cantidad_disponible`: entero. Ejemplo: `25`.  
   - `fecha_ultima_actualizacion`: fecha. Ejemplo: `2024-05-10`.
 - Cardinalidad: N:M
 - Justificación: cada producto puede estar asignado en 0 o más zonas, cada zona puede tener asignado 0 o más productos.
 
-3. **Empleado - asignación - Zona**   
+3. **Empleado - asignación - Zona: relación con atributos**   
 - Atributos:
   - `puesto`: cadena. Ejemplo: `supervisor`.  
   - `fecha_inicio`: fecha. Ejemplo: `2024-05-10`.
   - `fecha_fin`: fecha. Ejemplo: `2024-05-10`.
-- Cardinalidad: 1:1
-- Justificación: empleado o zona pueden no tener asignaciones registradas. Cada asignación vincula un empleado y una zona.
+- Cardinalidad: N:M
+- Justificación: Cada asignación liga exactamente 1 Empleado y 1 Zona. Historial permitido. Restricción semántica: un empleado no puede tener asignaciones con intervalos solapados (fecha_inicio/fecha_fin).
 
 4. **Cliente - hace - Pedido**
 - Cardinalidad: 1:N
-- Justificación: un cliente existe desde que hace un pedido, por tanto tiene al menos 1 y pueden ser más. Un pedido es realizado por un único cliente.
+- Justificación: un cliente puede haber hecho ente 0 y N pedidos, un pedido es realizado por un único cliente.
 
 5. **Empleado - gestiona - Pedido**  
 - Cardinalidad: 1:N
 - Justificación: un empleado puede no gestionar pedidos, gestionar uno o múltiples de ellos. Cada pedido tiene exactamente un responsable.
 
-6. **Pedido - incluye - Producto**
+6. **Pedido - incluye - Producto: relación con atributos**
 - Cardinalidad: N:M
 - Atributos:
   - `precio_unitario_linea`: decimal. Ejemplo: `57.25`.  
-  - `cantidad`: fecha. Ejemplo: `2024-05-10`. 
+  - `cantidad`: entero. Ejemplo: `37`. 
 - Justificación: un pedido incluye uno o más productos. Un producto puede no estar incluido en ningún pedido, estarlo en uno o múltiple de ellos.
 
-7. **Zona - se evalua - Productividad zona**
+7. **Zona - se evalua - Productividad zona: relación identificadora**
 - Cardinalidad: 1:N
 - Justificación: una zona puede no tener registros aún o tener múltiples de ellos. Cada registro pertenece a una única zona.
 
-8. **Empleado - se evalua — Productividad empleado** 
+8. **Empleado - se evalua — Productividad empleado: relación identificadora** 
 - Cardinalidad: 1:N
 - Justificación: un empleado puede no tener registros aún o tener múltiples de ellos. Cada registro pertenece a un único empleado.
 
